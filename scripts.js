@@ -14,10 +14,10 @@ function solve(bd) {
      * @returns {Board | false}
      */
     function solve_bd(bd) {
-        if (solved(bd)) {
+        if (isSolved(bd)) {
             return bd;
         }
-        return solve_lobd(next_boards(bd));
+        return solve_lobd(nextBoards(bd));
     }
 
     /**
@@ -44,15 +44,46 @@ function solve(bd) {
 /**
  * @param {Board} bd
  * @returns {boolean}
-*/
-function solved(bd) {
-    return true;
+ */
+function isSolved(bd) {
+    // Assume the board is valid (no duplicates)
+    return bd.every(e => typeof e === 'number');
 }
 
 /**
  * @param {Board} bd
  * @returns {Board[]}
-*/
-function next_boards(bd) {
-    return [[1, false], [3, 4]];
+ */
+function nextBoards(bd) {
+    /**
+     * search the first blank (false)
+     * fill with number 1-9
+     * remove invalid board (duplicates)
+     */
+    return keepOnlyValid(fillWithNumber(findBlank(bd), bd));
+}
+
+/**
+ * @param {Board} bd
+ * @returns {number}
+ */
+function findBlank(bd) {
+    return 0; // TODO !!!
+}
+
+/**
+ * @param {number} index
+ * @param {Board} [bd]
+ * @returns {Board[]}
+ */
+function fillWithNumber(index, bd) {
+    return [[false]]; // TODO !!!
+}
+
+/**
+ * @param {Board[]} lobd
+ * @returns {Board[]}
+ */
+function keepOnlyValid(lobd) {
+    return [[false]]; // TODO !!!
 }
