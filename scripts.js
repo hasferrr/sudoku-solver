@@ -1,33 +1,58 @@
 //@ts-check
 
-const ALL_VALS = [...Array(9)].map((_, index) => index + 1);
-const B = false;
-
+/**
+ * @typedef {Array<number | false>} Board
+ */
 
 /**
- * @param {number | false} bd
+ * @param {Board} bd
+ * @returns {Board | false}
  */
 function solve(bd) {
+    /**
+     * @param {Board} bd
+     * @returns {Board | false}
+     */
     function solve_bd(bd) {
         if (solved(bd)) {
             return bd;
-        } else {
-            return solve_lobd(next_boards(bd));
         }
+        return solve_lobd(next_boards(bd));
     }
 
+    /**
+     * @param {Board[]} lobd
+     * @returns {Board | false}
+     */
     function solve_lobd(lobd) {
         if (lobd.length === 0) {
             return false;
-        } else {
-            var tryResult = solve_bd(lobd[0]);
-            if (tryResult !== false) {
-                return tryResult;
-            } else {
-                return solve_lobd(lobd.slice(1));
-            }
         }
+
+        let tryToSolve = solve_bd(lobd[0]);
+        if (tryToSolve !== false) {
+            return tryToSolve;
+        }
+
+        return solve_lobd(lobd.slice(1));
     }
 
     return solve_bd(bd);
+}
+
+
+/**
+ * @param {Board} bd
+ * @returns {boolean}
+*/
+function solved(bd) {
+    return true;
+}
+
+/**
+ * @param {Board} bd
+ * @returns {Board[]}
+*/
+function next_boards(bd) {
+    return [[1, false], [3, 4]];
 }
