@@ -4,6 +4,8 @@
  * @typedef {Array<number | false>} Board
  */
 
+const SIZE = 9;
+
 /**
  * @param {Board} bd
  * @returns {Board | false}
@@ -47,6 +49,7 @@ function solve(bd) {
  */
 function isSolved(bd) {
     // Assume the board is valid (no duplicates)
+    // Use 'andmap' function
     return bd.every(e => typeof e === 'number');
 }
 
@@ -57,7 +60,7 @@ function isSolved(bd) {
 function nextBoards(bd) {
     /**
      * search the first blank (false)
-     * fill with number 1-9
+     * fill with number 1-SIZE
      * remove invalid board (duplicates)
      */
     return keepOnlyValid(fillWithNumber(findBlank(bd), bd));
@@ -68,16 +71,30 @@ function nextBoards(bd) {
  * @returns {number}
  */
 function findBlank(bd) {
-    return 0; // TODO !!!
+    // Assume: board has at least 1 blank square
+    for (let index = 0; index < bd.length; index++) {
+        if (bd[index] === false) {
+            return index;
+        }
+    }
+    return -1;
 }
 
 /**
  * @param {number} index
- * @param {Board} [bd]
+ * @param {Board} bd
  * @returns {Board[]}
  */
 function fillWithNumber(index, bd) {
-    return [[false]]; // TODO !!!
+    let num = 1;
+    let lobd = [];
+    while (num <= SIZE) {
+        let new_bd = Array.from(bd);
+        new_bd[index] = num;
+        lobd.push(new_bd);
+        num++;
+    }
+    return lobd;
 }
 
 /**
