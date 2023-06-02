@@ -4,8 +4,6 @@
  * @typedef {Array<number | false>} Board
  */
 
-const SIZE = 9;
-
 /**
  * @param {Board} bd
  * @returns {Board | false}
@@ -60,7 +58,7 @@ function isSolved(bd) {
 function nextBoards(bd) {
     /**
      * search the first blank (false)
-     * fill with number 1-SIZE
+     * fill with number 1-9
      * remove invalid board (duplicates)
      */
     return keepOnlyValid(fillWithNumber(findBlank(bd), bd));
@@ -88,7 +86,7 @@ function findBlank(bd) {
 function fillWithNumber(index, bd) {
     let num = 1;
     let lobd = [];
-    while (num <= SIZE) {
+    while (num <= 9) {
         let new_bd = Array.from(bd);
         new_bd[index] = num;
         lobd.push(new_bd);
@@ -102,5 +100,13 @@ function fillWithNumber(index, bd) {
  * @returns {Board[]}
  */
 function keepOnlyValid(lobd) {
-    return [[false]]; // TODO !!!
+    return lobd.filter(validBoard);
+}
+
+/**
+ * @param {Board} bd
+ * @returns {boolean}
+ */
+function validBoard(bd) {
+    return false; // TODO !!!
 }
