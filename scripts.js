@@ -236,3 +236,112 @@ function noDupInBox(pos, BOARD) {
 
     return rowIter(pos, FROW);
 }
+
+
+/**
+ * @param {number | false} value
+ * @param {number} row
+ * @param {number} column
+ * @param {Board} BOARD
+ */
+function sameValue(value, row, column, BOARD) {
+    const tryValue = readSquare(BOARD, rCtoPos(row, column));
+    if (tryValue !== false) {
+        return value === tryValue;
+    }
+    return false;
+}
+
+/**
+ * @param {number} pos
+ */
+function getRow(pos) {
+    return Math.floor(pos / 9);
+}
+
+/**
+ * @param {number} pos
+ */
+function getCol(pos) {
+    return pos % 9;
+}
+
+
+/**
+ * @param {number} pos
+ */
+function getBox(pos) {
+    const row = getRow(pos);
+    const col = getCol(pos);
+
+    if (row < 3) {
+        if (col < 3) return 0;
+        else if (col < 6) return 1;
+        else return 2;
+    } else if (row < 6) {
+        if (col < 3) return 3;
+        else if (col < 6) return 4;
+        else return 5;
+    } else {
+        if (col < 3) return 6;
+        else if (col < 6) return 7;
+        else return 8;
+    }
+}
+
+/**
+ * @param {number} box
+ * @returns {number}
+ */
+function getFirstColFromBox(box) {
+    const remainder = box % 3;
+    if (remainder === 0) {
+        return 0;
+    } else if (remainder === 1) {
+        return 3;
+    } else {
+        return 6;
+    }
+}
+
+/**
+ * @param {number} box
+ * @returns {number}
+ */
+function getFirstRowFromBox(box) {
+    if (box < 3) {
+        return 0;
+    } else if (box < 6) {
+        return 3;
+    } else {
+        return 6;
+    }
+}
+
+// Convert 0-based row and column to Pos
+/**
+ * @param {number} r
+ * @param {number} c
+ */
+function rCtoPos(r, c) {
+    return r * 9 + c;
+}
+
+// Produce value at given position on board.
+/**
+ * @param {Board} bd
+ * @param {number} p
+ */
+function readSquare(bd, p) {
+    return bd[p];
+}
+
+// Produce new board with val at given position
+/**
+ * @param {any[]} bd
+ * @param {number} p
+ * @param {any} nv
+ */
+function fillSquare(bd, p, nv) {
+    return bd.slice(0, p).concat(nv, bd.slice(p + 1));
+}
