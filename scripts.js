@@ -138,19 +138,47 @@ function validBoard(bd) {
  * @param {Board} BOARD
  */
 function noDupInRow(pos, count, max, BOARD) {
-    if (count > max) {
-        return true;
-    } else {
-        const tryValue = readSquare(BOARD, pos);
-        const row = getRow(pos);
-        return (
-            (tryValue !== false)
+    while (true) {
+        if (count > max) {
+            return true;
+        } else {
+            const tryValue = readSquare(BOARD, pos);
+            const row = getRow(pos);
+
+            if (!(tryValue !== false)
                 ? (pos !== rCtoPos(row, count)
                     ? !sameValue(tryValue, row, count, BOARD)
                     : true)
-                : true
-                &&
-                noDupInRow(pos, count + 1, max, BOARD)
-        );
+                : true) {
+                return false;
+            }
+            count++;
+        }
+    }
+}
+
+/**
+ * @param {number} pos
+ * @param {number} count
+ * @param {number} max
+ * @param {Board} BOARD
+ */
+function noDupInCol(pos, count, max, BOARD) {
+    while (true) {
+        if (count > max) {
+            return true;
+        } else {
+            const tryValue = readSquare(BOARD, pos);
+            const col = getCol(pos);
+
+            if (!(tryValue !== false)
+                ? (pos !== rCtoPos(count, col)
+                    ? !sameValue(tryValue, count, col, BOARD)
+                    : true)
+                : true) {
+                return false;
+            }
+            count++;
+        }
     }
 }
