@@ -108,5 +108,25 @@ function keepOnlyValid(lobd) {
  * @returns {boolean}
  */
 function validBoard(bd) {
-    return false; // TODO !!!
+
+    let board = Array.from(bd);
+    let pos = 0;
+
+    while (board.length > 0) {
+        if (board[0] !== false && !noDuplicate(pos)) {
+            return false;
+        }
+        board = board.slice(1);
+        pos++;
+    }
+
+    return true;
+
+    function noDuplicate(pos) {
+        return (
+            noDupInRow(pos, 0, 8, bd) &&
+            noDupInCol(pos, 0, 8, bd) &&
+            noDupInBox(pos, bd)
+        );
+    }
 }
