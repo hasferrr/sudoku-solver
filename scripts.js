@@ -122,6 +122,9 @@ function validBoard(bd) {
 
     return true;
 
+    /**
+     * @param {number} pos
+     */
     function noDuplicate(pos) {
         return (
             noDupInRow(pos, 0, 8, bd) &&
@@ -181,4 +184,55 @@ function noDupInCol(pos, count, max, BOARD) {
             count++;
         }
     }
+}
+
+/**
+ * @param {number} pos
+ * @param {Board} BOARD
+ */
+function noDupInBox(pos, BOARD) {
+    const BOX = getBox(pos);
+    const FROW = getFirstRowFromBox(BOX);
+    const FCOL = getFirstColFromBox(BOX);
+
+    /**
+     * @param {number} pos
+     * @param {number} countRow
+     */
+    function rowIter(pos, countRow) {
+        while (true) {
+            if (countRow > FROW + 2) {
+                return true;
+            }
+            if (!colIter(countRow, FCOL)) {
+                return false;
+            }
+            countRow++;
+        }
+    }
+
+    /**
+     * @param {number} rowFixed
+     * @param {number} countCol
+     */
+    function colIter(rowFixed, countCol) {
+        while (true) {
+            if (countCol > FCOL + 2) {
+                return true;
+            } else {
+                const tryValue = readSquare(BOARD, pos);
+
+                if (!(tryValue !== false
+                    ? (pos !== rCtoPos(rowFixed, countCol)
+                        ? !sameValue(tryValue, rowFixed, countCol, BOARD)
+                        : true)
+                    : true)) {
+                    return false;
+                }
+                countCol++;
+            }
+        }
+    }
+
+    return rowIter(pos, FROW);
 }
