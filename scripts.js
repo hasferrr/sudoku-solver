@@ -1,7 +1,7 @@
 //@ts-check
 
 /**
- * @typedef {Array<number | false>} Board
+ * @typedef {Array<Array<number | false>>} Board
  */
 
 const SIZE = 9;
@@ -68,29 +68,37 @@ function nextBoards(bd) {
 
 /**
  * @param {Board} bd
- * @returns {number}
+ * @returns {number[]}
  */
 function findBlank(bd) {
     // Assume: board has at least 1 blank square
-    for (let index = 0; index < bd.length; index++) {
-        if (bd[index] === false) {
-            return index;
+    for (let i = 0; i < bd.length; i++) {
+        const row = bd[i];
+
+        for (let j = 0; j < row.length; j++) {
+            if (row[j] === false) {
+                return [i, j];
+            }
         }
     }
-    return -1;
+    return [-1, -1];
 }
 
 /**
- * @param {number} index
+ * @param {number[]} index
  * @param {Board} bd
  * @returns {Board[]}
  */
 function fillWithNumber(index, bd) {
+    const i = index[0];
+    const j = index[1];
+
     let num = 1;
     let lobd = [];
+
     while (num <= SIZE) {
-        let new_bd = Array.from(bd);
-        new_bd[index] = num;
+        let new_bd = deepCopyArray(bd);
+        new_bd[i][j] = num;
         lobd.push(new_bd);
         num++;
     }
@@ -98,9 +106,16 @@ function fillWithNumber(index, bd) {
 }
 
 /**
+ * @param {Board} arr
+ */
+function deepCopyArray(arr) {
+    return arr.map(subArray => subArray.slice());
+}
+
+/**
  * @param {Board[]} lobd
  * @returns {Board[]}
  */
 function keepOnlyValid(lobd) {
-    return [[false]]; // TODO !!!
+    return []; // TODO !!!
 }
