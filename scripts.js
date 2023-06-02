@@ -14,7 +14,7 @@ function solve(bd) {
      * @returns {Board | false}
      */
     function solve_bd(bd) {
-        if (isSolved(bd)) {
+        if (solved(bd)) {
             return bd;
         }
         return solve_lobd(nextBoards(bd));
@@ -45,7 +45,7 @@ function solve(bd) {
  * @param {Board} bd
  * @returns {boolean}
  */
-function isSolved(bd) {
+function solved(bd) {
     // Assume the board is valid (no duplicates)
     // Use 'andmap' function
     return bd.every(e => typeof e === 'number');
@@ -148,11 +148,11 @@ function noDupInRow(pos, count, max, BOARD) {
             const tryValue = readSquare(BOARD, pos);
             const row = getRow(pos);
 
-            if (!(tryValue !== false)
+            if (!((tryValue !== false)
                 ? (pos !== rCtoPos(row, count)
                     ? !sameValue(tryValue, row, count, BOARD)
                     : true)
-                : true) {
+                : true)) {
                 return false;
             }
             count++;
@@ -174,11 +174,11 @@ function noDupInCol(pos, count, max, BOARD) {
             const tryValue = readSquare(BOARD, pos);
             const col = getCol(pos);
 
-            if (!(tryValue !== false)
+            if (!((tryValue !== false)
                 ? (pos !== rCtoPos(count, col)
                     ? !sameValue(tryValue, count, col, BOARD)
                     : true)
-                : true) {
+                : true)) {
                 return false;
             }
             count++;
