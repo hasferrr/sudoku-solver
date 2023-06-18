@@ -1,347 +1,141 @@
 //@ts-check
 
 /**
- * @typedef {Array<number | false>} Board
+ * @type {Element | null}
  */
+const container = document.querySelector('.container');
 
-/**
- * @param {Board} bd
- * @returns {Board | false}
- */
-function solve(bd) {
-    /**
-     * @param {Board} bd
-     * @returns {Board | false}
-     */
-    function solve_bd(bd) {
-        if (solved(bd)) {
-            return bd;
-        }
-        return solve_lobd(nextBoards(bd));
+makeSudokuGrid();
+enableArrowKeysToNavigateInputs();
+onlyNumber();
+
+function makeSudokuGrid() {
+    const size = 9;
+
+    let col = document.createElement('div');
+    col.classList.add('col');
+
+    let box = document.createElement('div');
+    box.classList.add('box');
+
+    let inputBox = document.createElement('input');
+    inputBox.classList.add('in')
+    inputBox.maxLength = 1;
+    inputBox.autocomplete = 'off';
+
+    for (let i = 0; i < size; i++) {
+        let boxtoadd = box.cloneNode(true);
+        boxtoadd.classList.add('b' + i);
+        let inputNew = inputBox.cloneNode(true);
+        inputNew.classList.add('ib' + i);
+        boxtoadd.appendChild(inputNew);
+        col.appendChild(boxtoadd);
     }
 
-    /**
-     * @param {Board[]} lobd
-     * @returns {Board | false}
-     */
-    function solve_lobd(lobd) {
-        if (lobd.length === 0) {
-            return false;
-        }
-
-        let tryToSolve = solve_bd(lobd[0]);
-        if (tryToSolve !== false) {
-            return tryToSolve;
-        }
-
-        return solve_lobd(lobd.slice(1));
-    }
-
-    return solve_bd(bd);
-}
-
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function solved(bd) {
-    // Assume the board is valid (no duplicates)
-    // Use 'andmap' function
-    return bd.every(e => typeof e === 'number');
-}
-
-/**
- * @param {Board} bd
- * @returns {Board[]}
- */
-function nextBoards(bd) {
-    /**
-     * search the first blank (false)
-     * fill with number 1-9
-     * remove invalid board (duplicates)
-     */
-    return keepOnlyValid(fillWithNumber(findBlank(bd), bd));
-}
-
-/**
- * @param {Board} bd
- * @returns {number}
- */
-function findBlank(bd) {
-    // Assume: board has at least 1 blank square
-    for (let index = 0; index < bd.length; index++) {
-        if (bd[index] === false) {
-            return index;
-        }
-    }
-    return -1;
-}
-
-/**
- * @param {number} index
- * @param {Board} bd
- * @returns {Board[]}
- */
-function fillWithNumber(index, bd) {
-    let num = 1;
-    let lobd = [];
-    while (num <= 9) {
-        let new_bd = Array.from(bd);
-        new_bd[index] = num;
-        lobd.push(new_bd);
-        num++;
-    }
-    return lobd;
-}
-
-/**
- * @param {Board[]} lobd
- * @returns {Board[]}
- */
-function keepOnlyValid(lobd) {
-    return lobd.filter(validBoard);
-}
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function validBoard(bd) {
-
-    let board = Array.from(bd);
-    let pos = 0;
-
-    while (board.length > 0) {
-        if (board[0] !== false && !noDuplicate(pos)) {
-            return false;
-        }
-        board = board.slice(1);
-        pos++;
-    }
-
-    return true;
-
-    /**
-     * @param {number} pos
-     */
-    function noDuplicate(pos) {
-        return (
-            noDupInRow(pos, 0, 8, bd) &&
-            noDupInCol(pos, 0, 8, bd) &&
-            noDupInBox(pos, bd)
-        );
+    for (let i = 0; i < size; i++) {
+        let coltoadd = col.cloneNode(true);
+        coltoadd.classList.add('c' + i);
+        container?.appendChild(coltoadd);
     }
 }
 
-/**
- * @param {number} pos
- * @param {number} count
- * @param {number} max
- * @param {Board} BOARD
- */
-function noDupInRow(pos, count, max, BOARD) {
-    while (true) {
-        if (count > max) {
-            return true;
-        } else {
-            const tryValue = readSquare(BOARD, pos);
-            const row = getRow(pos);
+function enableArrowKeysToNavigateInputs() {
+    // Get all the input elements
+    const inputs = document.querySelectorAll('input');
 
-            if (!((tryValue !== false)
-                ? (pos !== rCtoPos(row, count)
-                    ? !sameValue(tryValue, row, count, BOARD)
-                    : true)
-                : true)) {
-                return false;
+    // Add keydown event listener to the inputs
+    inputs.forEach((input) => {
+        input.addEventListener('keydown', (e) => {
+            // Get the current input index
+            const currentIndex = Array.from(inputs).indexOf(input);
+
+            // Calculate the index of the input to navigate to
+            let newIndex;
+            switch (e.key) {
+                case 'ArrowLeft':
+                    // Left arrow key
+                    newIndex = currentIndex - 1;
+                    break;
+                case 'ArrowRight':
+                    // Right arrow key
+                    newIndex = currentIndex + 1;
+                    break;
+                case 'ArrowUp':
+                    // Up arrow key
+                    newIndex = currentIndex - 9;
+                    break;
+                case 'ArrowDown':
+                    // Down arrow key
+                    newIndex = currentIndex + 9;
+                    break;
             }
-            count++;
-        }
-    }
-}
 
-/**
- * @param {number} pos
- * @param {number} count
- * @param {number} max
- * @param {Board} BOARD
- */
-function noDupInCol(pos, count, max, BOARD) {
-    while (true) {
-        if (count > max) {
-            return true;
-        } else {
-            const tryValue = readSquare(BOARD, pos);
-            const col = getCol(pos);
+            // Check if the new index is within bounds
+            if (newIndex >= 0 && newIndex < inputs.length) {
+                // Focus on the new input
+                inputs[newIndex].focus();
 
-            if (!((tryValue !== false)
-                ? (pos !== rCtoPos(count, col)
-                    ? !sameValue(tryValue, count, col, BOARD)
-                    : true)
-                : true)) {
-                return false;
+                // Check if the new input has a value and select its text after a short delay
+                setTimeout(() => {
+                    if (inputs[newIndex].value) {
+                        inputs[newIndex].select();
+                    }
+                }, 10);
             }
-            count++;
-        }
-    }
+        });
+    });
 }
 
-/**
- * @param {number} pos
- * @param {Board} BOARD
- */
-function noDupInBox(pos, BOARD) {
-    const BOX = getBox(pos);
-    const FROW = getFirstRowFromBox(BOX);
-    const FCOL = getFirstColFromBox(BOX);
+function onlyNumber() {
+    // Get all the input elements with class "in"
+    const inputFields = document.querySelectorAll('.in');
 
-    /**
-     * @param {number} pos
-     * @param {number} countRow
-     */
-    function rowIter(pos, countRow) {
-        while (true) {
-            if (countRow > FROW + 2) {
-                return true;
-            }
-            if (!colIter(countRow, FCOL)) {
-                return false;
-            }
-            countRow++;
-        }
-    }
-
-    /**
-     * @param {number} rowFixed
-     * @param {number} countCol
-     */
-    function colIter(rowFixed, countCol) {
-        while (true) {
-            if (countCol > FCOL + 2) {
-                return true;
-            } else {
-                const tryValue = readSquare(BOARD, pos);
-
-                if (!(tryValue !== false
-                    ? (pos !== rCtoPos(rowFixed, countCol)
-                        ? !sameValue(tryValue, rowFixed, countCol, BOARD)
-                        : true)
-                    : true)) {
-                    return false;
-                }
-                countCol++;
-            }
-        }
-    }
-
-    return rowIter(pos, FROW);
+    // Add input event listener to the input fields
+    inputFields.forEach((input) => {
+        input.addEventListener('input', (e) => {
+            // Remove any non-numeric characters from the input value
+            const newValue = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = newValue;
+        });
+    });
 }
 
+function clearInputValues() {
+    const inputs = document.querySelectorAll('.in');
 
-/**
- * @param {number | false} value
- * @param {number} row
- * @param {number} column
- * @param {Board} BOARD
- */
-function sameValue(value, row, column, BOARD) {
-    const tryValue = readSquare(BOARD, rCtoPos(row, column));
-    if (tryValue !== false) {
-        return value === tryValue;
-    }
-    return false;
+    inputs.forEach((input) => {
+        input.value = '';
+        input.style.backgroundColor = 'transparent';
+    });
 }
 
-/**
- * @param {number} pos
- */
-function getRow(pos) {
-    return Math.floor(pos / 9);
-}
-
-/**
- * @param {number} pos
- */
-function getCol(pos) {
-    return pos % 9;
-}
-
-
-/**
- * @param {number} pos
- */
-function getBox(pos) {
-    const row = getRow(pos);
-    const col = getCol(pos);
-
-    if (row < 3) {
-        if (col < 3) return 0;
-        else if (col < 6) return 1;
-        else return 2;
-    } else if (row < 6) {
-        if (col < 3) return 3;
-        else if (col < 6) return 4;
-        else return 5;
+function viewSolvedBoard() {
+    let newSolvedBoard = solveRightNow();
+    if (newSolvedBoard === 1) {
+        alert("Board is invalid");
+        return;
+    } else if (newSolvedBoard === 2) {
+        alert('Unsolvable board');
+        return;
     } else {
-        if (col < 3) return 6;
-        else if (col < 6) return 7;
-        else return 8;
+        setInputValues(newSolvedBoard);
     }
 }
 
-/**
- * @param {number} box
- * @returns {number}
- */
-function getFirstColFromBox(box) {
-    const remainder = box % 3;
-    if (remainder === 0) {
-        return 0;
-    } else if (remainder === 1) {
-        return 3;
-    } else {
-        return 6;
-    }
+function setInputValues(board) {
+    const inputs = document.querySelectorAll('.in');
+    clearBackgroundColor();
+    inputs.forEach((input, index) => {
+        if (input.value.trim() === '') {
+            input.value = board[index] || '';
+            input.style.backgroundColor = 'rgb(158 183 206 / 26%)';
+        }
+    });
 }
 
-/**
- * @param {number} box
- * @returns {number}
- */
-function getFirstRowFromBox(box) {
-    if (box < 3) {
-        return 0;
-    } else if (box < 6) {
-        return 3;
-    } else {
-        return 6;
-    }
-}
-
-// Convert 0-based row and column to Pos
-/**
- * @param {number} r
- * @param {number} c
- */
-function rCtoPos(r, c) {
-    return r * 9 + c;
-}
-
-// Produce value at given position on board.
-/**
- * @param {Board} bd
- * @param {number} p
- */
-function readSquare(bd, p) {
-    return bd[p];
-}
-
-// Produce new board with val at given position
-/**
- * @param {any[]} bd
- * @param {number} p
- * @param {any} nv
- */
-function fillSquare(bd, p, nv) {
-    return bd.slice(0, p).concat(nv, bd.slice(p + 1));
+function clearBackgroundColor() {
+    const inputs = document.querySelectorAll('.in');
+    inputs.forEach((input) => {
+        input.style.backgroundColor = 'transparent';
+    });
 }

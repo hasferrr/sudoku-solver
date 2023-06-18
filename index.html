@@ -7,12 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudoku Solver</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="sudokuSolver.js" defer></script>
     <script src="scripts.js" defer></script>
+    <script src="solve.js" defer></script>
+    <script src="unitTest.js" defer></script>
 </head>
 
 <body>
     <div id="main">
-        <div id="container">
+        <h1>Sudoku Solver</h1>
+        <div class="container">
+        </div>
+        <div class="buttons">
+            <button onclick="viewSolvedBoard()">Solve</button>
+            <button onclick="clearInputValues()">Clear</button>
+            <button onclick="clearBackgroundColor()">Clear Color</button>
+        </div>
+        <div class="demo">
+            <button onclick="clearInputValues();setInputValues(BD2);clearBackgroundColor()">BD2</button>
+            <button onclick="clearInputValues();setInputValues(BD3);clearBackgroundColor()">BD3</button>
+            <button onclick="clearInputValues();setInputValues(BD4);clearBackgroundColor()">BD4</button>
+            <button onclick="clearInputValues();setInputValues(BD5);clearBackgroundColor()">BD5</button>
+            <button onclick="clearInputValues();setInputValues(BD6);clearBackgroundColor()">BD6</button>
+            <button onclick="clearInputValues();setInputValues(BD7);clearBackgroundColor()">BD7</button>
         </div>
     </div>
 </body>
