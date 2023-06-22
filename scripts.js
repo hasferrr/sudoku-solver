@@ -1,184 +1,141 @@
 //@ts-check
 
 /**
- * @typedef {Array<Array<number | false>>} Board
+ * @type {Element | null}
  */
+const container = document.querySelector('.container');
 
-const SIZE = 9;
+makeSudokuGrid();
+enableArrowKeysToNavigateInputs();
+onlyNumber();
 
-/**
- * @param {Board} bd
- * @returns {Board | false}
- */
-function solve(bd) {
-    /**
-     * @param {Board} bd
-     * @returns {Board | false}
-     */
-    function solve_bd(bd) {
-        if (isSolved(bd)) {
-            return bd;
-        }
-        return solve_lobd(nextBoards(bd));
+function makeSudokuGrid() {
+    const size = 9;
+
+    let col = document.createElement('div');
+    col.classList.add('col');
+
+    let box = document.createElement('div');
+    box.classList.add('box');
+
+    let inputBox = document.createElement('input');
+    inputBox.classList.add('in')
+    inputBox.maxLength = 1;
+    inputBox.autocomplete = 'off';
+
+    for (let i = 0; i < size; i++) {
+        let boxtoadd = box.cloneNode(true);
+        boxtoadd.classList.add('b' + i);
+        let inputNew = inputBox.cloneNode(true);
+        inputNew.classList.add('ib' + i);
+        boxtoadd.appendChild(inputNew);
+        col.appendChild(boxtoadd);
     }
 
-    /**
-     * @param {Board[]} lobd
-     * @returns {Board | false}
-     */
-    function solve_lobd(lobd) {
-        if (lobd.length === 0) {
-            return false;
-        }
-
-        let tryToSolve = solve_bd(lobd[0]);
-        if (tryToSolve !== false) {
-            return tryToSolve;
-        }
-
-        return solve_lobd(lobd.slice(1));
+    for (let i = 0; i < size; i++) {
+        let coltoadd = col.cloneNode(true);
+        coltoadd.classList.add('c' + i);
+        container?.appendChild(coltoadd);
     }
-
-    return solve_bd(bd);
 }
 
+function enableArrowKeysToNavigateInputs() {
+    // Get all the input elements
+    const inputs = document.querySelectorAll('input');
 
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function isSolved(bd) {
-    // Assume the board is valid (no duplicates)
-    // Use 'andmap' function
-    return bd.every(e => typeof e === 'number');
-}
+    // Add keydown event listener to the inputs
+    inputs.forEach((input) => {
+        input.addEventListener('keydown', (e) => {
+            // Get the current input index
+            const currentIndex = Array.from(inputs).indexOf(input);
 
-/**
- * @param {Board} bd
- * @returns {Board[]}
- */
-function nextBoards(bd) {
-    /**
-     * search the first blank (false)
-     * fill with number 1-SIZE
-     * remove invalid board (duplicates)
-     */
-    return keepOnlyValid(fillWithNumber(findBlank(bd), bd));
-}
-
-/**
- * @param {Board} bd
- * @returns {number[]}
- */
-function findBlank(bd) {
-    // Assume: board has at least 1 blank square
-    for (let i = 0; i < bd.length; i++) {
-        const row = bd[i];
-
-        for (let j = 0; j < row.length; j++) {
-            if (row[j] === false) {
-                return [i, j];
+            // Calculate the index of the input to navigate to
+            let newIndex;
+            switch (e.key) {
+                case 'ArrowLeft':
+                    // Left arrow key
+                    newIndex = currentIndex - 1;
+                    break;
+                case 'ArrowRight':
+                    // Right arrow key
+                    newIndex = currentIndex + 1;
+                    break;
+                case 'ArrowUp':
+                    // Up arrow key
+                    newIndex = currentIndex - 9;
+                    break;
+                case 'ArrowDown':
+                    // Down arrow key
+                    newIndex = currentIndex + 9;
+                    break;
             }
+
+            // Check if the new index is within bounds
+            if (newIndex >= 0 && newIndex < inputs.length) {
+                // Focus on the new input
+                inputs[newIndex].focus();
+
+                // Check if the new input has a value and select its text after a short delay
+                setTimeout(() => {
+                    if (inputs[newIndex].value) {
+                        inputs[newIndex].select();
+                    }
+                }, 10);
+            }
+        });
+    });
+}
+
+function onlyNumber() {
+    // Get all the input elements with class "in"
+    const inputFields = document.querySelectorAll('.in');
+
+    // Add input event listener to the input fields
+    inputFields.forEach((input) => {
+        input.addEventListener('input', (e) => {
+            // Remove any non-numeric characters from the input value
+            const newValue = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = newValue;
+        });
+    });
+}
+
+function clearInputValues() {
+    const inputs = document.querySelectorAll('.in');
+
+    inputs.forEach((input) => {
+        input.value = '';
+        input.style.backgroundColor = 'transparent';
+    });
+}
+
+function viewSolvedBoard() {
+    let newSolvedBoard = solveRightNow();
+    if (newSolvedBoard === 1) {
+        alert("Board is invalid");
+        return;
+    } else if (newSolvedBoard === 2) {
+        alert('Unsolvable board');
+        return;
+    } else {
+        setInputValues(newSolvedBoard);
+    }
+}
+
+function setInputValues(board) {
+    const inputs = document.querySelectorAll('.in');
+    clearBackgroundColor();
+    inputs.forEach((input, index) => {
+        if (input.value.trim() === '') {
+            input.value = board[index] || '';
+            input.style.backgroundColor = 'rgb(158 183 206 / 26%)';
         }
-    }
-    return [-1, -1];
+    });
 }
 
-/**
- * @param {number[]} index
- * @param {Board} bd
- * @returns {Board[]}
- */
-function fillWithNumber(index, bd) {
-    const i = index[0];
-    const j = index[1];
-
-    let num = 1;
-    let lobd = [];
-
-    while (num <= SIZE) {
-        let new_bd = deepCopyArray(bd);
-        new_bd[i][j] = num;
-        lobd.push(new_bd);
-        num++;
-    }
-    return lobd;
-}
-
-/**
- * @param {Board} arr
- */
-function deepCopyArray(arr) {
-    return arr.map(subArray => subArray.slice());
-}
-
-
-/**
- * @param {Board[]} lobd
- * @returns {Board[]}
- */
-function keepOnlyValid(lobd) {
-    return lobd.filter(isValidBoard);
-}
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function isValidBoard(bd) {
-    return validRow(bd) && validColumn(bd) && validBox(bd);
-}
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function validRow(bd) {
-    for (let i = 0; i < bd.length; i++) {
-        const row = bd[i];
-        if (hasDuplicate(row)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/**
- * @param {any[]} arr
- */
-function hasDuplicate(arr) {
-    const uniqueSet = new Set(arr);
-    return uniqueSet.size !== arr.length;
-}
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function validColumn(bd) {
-    /**
-     * for each column 1, 2, 3, ..., SIZE
-     * - make new array
-     * - check valid with hasDuplicate
-     * - if not valid, return false
-     * return true
-     */
-    const transposedBoard = transposeArray(bd);
-    return validRow(transposedBoard);
-}
-
-/**
- * @param {Board} arr
- * @returns {Board}
- */
-function transposeArray(arr) {
-    return arr[0].map((_, columnIndex) => arr.map(row => row[columnIndex]));
-}
-
-/**
- * @param {Board} bd
- * @returns {boolean}
- */
-function validBox(bd) {
-    return false; // TODO !!!
+function clearBackgroundColor() {
+    const inputs = document.querySelectorAll('.in');
+    inputs.forEach((input) => {
+        input.style.backgroundColor = 'transparent';
+    });
 }
