@@ -94,7 +94,7 @@ function onlyNumber() {
     inputFields.forEach((input) => {
         input.addEventListener('input', (e) => {
             // Remove any non-numeric characters from the input value
-            const newValue = e.target.value.replace(/[^0-9]/g, '');
+            const newValue = e.target.value.replace(/[^1-9]/g, '');
             e.target.value = newValue;
         });
     });
