@@ -5,6 +5,7 @@
  */
 
 /**
+ * Return solved sudoku Board if solvable or return False if unsolvable
  * @param {Board} bd
  * @returns {Board | false}
  */
@@ -13,35 +14,36 @@ function solve(bd) {
      * @param {Board} bd
      * @returns {Board | false}
      */
-    function solve_bd(bd) {
+    function solveBD(bd) {
         if (isSolved(bd)) {
             return bd;
         }
-        return solve_lobd(nextBoards(bd));
+        return solveLOBD(nextBoards(bd));
     }
 
     /**
-     * @param {Board[]} lobd
+     * @param {Board[]} lobd - lobd a.k.a. List of Board (Array of Boards)
      * @returns {Board | false}
      */
-    function solve_lobd(lobd) {
+    function solveLOBD(lobd) {
         if (lobd.length === 0) {
             return false;
         }
 
-        let tryToSolve = solve_bd(lobd[0]);
+        let tryToSolve = solveBD(lobd[0]);
         if (tryToSolve !== false) {
             return tryToSolve;
         }
 
-        return solve_lobd(lobd.slice(1));
+        return solveLOBD(lobd.slice(1));
     }
 
-    return solve_bd(bd);
+    return solveBD(bd);
 }
 
 
 /**
+ * Return True if the given board is solved (full) or False otherwise
  * @param {Board} bd
  * @returns {boolean}
  */
@@ -52,6 +54,7 @@ function isSolved(bd) {
 }
 
 /**
+ * Return the next possible valid boards to the Array
  * @param {Board} bd
  * @returns {Board[]}
  */
