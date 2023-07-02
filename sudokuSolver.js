@@ -138,28 +138,30 @@ function validBoard(bd) {
 }
 
 /**
+ * Abstract function for noDupInRow and noDupInCol
  * @param {number} pos
  * @param {number} count
  * @param {number} max
- * @param {Board} BOARD
+ * @param {Board} bd
+ * @param {boolean} isRow
  */
-function noDupInRow(pos, count, max, BOARD) {
+function noDuplicateInRowOrColumn(pos, count, max, bd, isRow) {
     while (true) {
         if (count > max) {
             return true;
-        } else {
-            const tryValue = readSquare(BOARD, pos);
-            const row = getRow(pos);
-
-            if (!((tryValue !== false)
-                ? (pos !== rCtoPos(row, count)
-                    ? !sameValue(tryValue, row, count, BOARD)
-                    : true)
-                : true)) {
-                return false;
-            }
-            count++;
         }
+        const tryValue = readSquare(bd, pos);
+        const row = isRow ? getRow(pos) : count;
+        const col = isRow ? count : getCol(pos);
+
+        if (!((tryValue !== false)
+            ? (pos !== rCtoPos(row, col)
+                ? !sameValue(tryValue, row, col, bd)
+                : true)
+            : true)) {
+            return false;
+        }
+        count++;
     }
 }
 
@@ -167,26 +169,20 @@ function noDupInRow(pos, count, max, BOARD) {
  * @param {number} pos
  * @param {number} count
  * @param {number} max
- * @param {Board} BOARD
+ * @param {Board} bd
  */
-function noDupInCol(pos, count, max, BOARD) {
-    while (true) {
-        if (count > max) {
-            return true;
-        } else {
-            const tryValue = readSquare(BOARD, pos);
-            const col = getCol(pos);
+function noDupInRow(pos, count, max, bd) {
+    return noDuplicateInRowOrColumn(pos, count, max, bd, true);
+}
 
-            if (!((tryValue !== false)
-                ? (pos !== rCtoPos(count, col)
-                    ? !sameValue(tryValue, count, col, BOARD)
-                    : true)
-                : true)) {
-                return false;
-            }
-            count++;
-        }
-    }
+/**
+ * @param {number} pos
+ * @param {number} count
+ * @param {number} max
+ * @param {Board} bd
+ */
+function noDupInCol(pos, count, max, bd) {
+    return noDuplicateInRowOrColumn(pos, count, max, bd, false);
 }
 
 /**
