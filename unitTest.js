@@ -67,18 +67,18 @@ function CHECK_EXPECT() {
     console.log(validBoard(fillSquare(BD4, 1, 6)) === false);
 
     console.log('no dub in row');
-    console.log(noDupInRow(0, 0, 8, BD1) === true);
-    console.log(noDupInRow(4, 0, 8, BD2) === true);
-    console.log(noDupInCol(56, 0, 8, BD4s) === true);
-    console.log(noDupInCol(30, 0, 8, BD4) === true);
-    console.log(noDupInRow(3, 0, 8, fillSquare(BD4, 3, 5)) === false);
+    console.log(noDupInRow(0, BD1) === true);
+    console.log(noDupInRow(4, BD2) === true);
+    console.log(noDupInCol(56, BD4s) === true);
+    console.log(noDupInCol(30, BD4) === true);
+    console.log(noDupInRow(3, fillSquare(BD4, 3, 5)) === false);
 
     console.log('no dub in col');
-    console.log(noDupInCol(0, 0, 8, BD1) === true);
-    console.log(noDupInCol(9, 0, 8, BD3) === true);
-    console.log(noDupInCol(45, 0, 8, BD4s) === true);
-    console.log(noDupInCol(30, 0, 8, BD4) === true);
-    console.log(noDupInCol(20, 0, 8, fillSquare(BD4, 20, 2)) === false);
+    console.log(noDupInCol(0, BD1) === true);
+    console.log(noDupInCol(9, BD3) === true);
+    console.log(noDupInCol(45, BD4s) === true);
+    console.log(noDupInCol(30, BD4) === true);
+    console.log(noDupInCol(20, fillSquare(BD4, 20, 2)) === false);
 
 
     console.log('no DUPLICATE in BOX');

@@ -1,11 +1,16 @@
 //@ts-check
 
 /**
+ * Board is Array of <Number(1 to 9) OR False> that represents sudoku board
+ * - Number in the board means actual number
+ * - False in the board means empty slot
+ * Look at constant.js for sudoku board example
  * @typedef {Array<number | false>} Board
  */
 
 /**
  * Return solved sudoku Board if solvable or return False if unsolvable
+ * ASSUME: bd is valid sudoku board (array of 1-9 OR False)
  * @param {Board} bd
  * @returns {Board | false}
  */
@@ -130,8 +135,8 @@ function validBoard(bd) {
      */
     function noDuplicate(pos) {
         return (
-            noDupInRow(pos, 0, 8, bd) &&
-            noDupInCol(pos, 0, 8, bd) &&
+            noDupInRow(pos, bd) &&
+            noDupInCol(pos, bd) &&
             noDupInBox(pos, bd)
         );
     }
@@ -140,23 +145,23 @@ function validBoard(bd) {
 /**
  * Abstract function for noDupInRow and noDupInCol
  * @param {number} pos
- * @param {number} count
- * @param {number} max
  * @param {Board} bd
- * @param {boolean} isRow
+ * @param {(pos: number, count: number) => number} row
+ * @param {(pos: number, count: number) => number} col
  */
-function noDuplicateInRowOrColumn(pos, count, max, bd, isRow) {
+function noDuplicateInRowOrColumn(pos, bd, row, col) {
+    let count = 0; // accumulator
+    let grid = 9;   // number of sudoku grid
+
     while (true) {
-        if (count > max) {
+        if (count >= grid) {
             return true;
         }
         const tryValue = readSquare(bd, pos);
-        const row = isRow ? getRow(pos) : count;
-        const col = isRow ? count : getCol(pos);
 
         if (!((tryValue !== false)
-            ? (pos !== rCtoPos(row, col)
-                ? !sameValue(tryValue, row, col, bd)
+            ? (pos !== rCtoPos(row(pos, count), col(pos, count))
+                ? !sameValue(tryValue, row(pos, count), col(pos, count), bd)
                 : true)
             : true)) {
             return false;
@@ -167,22 +172,40 @@ function noDuplicateInRowOrColumn(pos, count, max, bd, isRow) {
 
 /**
  * @param {number} pos
- * @param {number} count
- * @param {number} max
  * @param {Board} bd
  */
-function noDupInRow(pos, count, max, bd) {
-    return noDuplicateInRowOrColumn(pos, count, max, bd, true);
+function noDupInRow(pos, bd) {
+    /**
+     * @param {number} pos
+     * @param {number} count
+     */
+    const row = (pos, count) => getRow(pos);
+    /**
+     * @param {number} pos
+     * @param {number} count
+     */
+    const col = (pos, count) => count;
+
+    return noDuplicateInRowOrColumn(pos, bd, row, col);
 }
 
 /**
  * @param {number} pos
- * @param {number} count
- * @param {number} max
  * @param {Board} bd
  */
-function noDupInCol(pos, count, max, bd) {
-    return noDuplicateInRowOrColumn(pos, count, max, bd, false);
+function noDupInCol(pos, bd) {
+    /**
+     * @param {number} pos
+     * @param {number} count
+     */
+    const row = (pos, count) => count;
+    /**
+     * @param {number} pos
+     * @param {number} count
+     */
+    const col = (pos, count) => getCol(pos);
+
+    return noDuplicateInRowOrColumn(pos, bd, row, col);
 }
 
 /**
@@ -218,18 +241,17 @@ function noDupInBox(pos, BOARD) {
         while (true) {
             if (countCol > FCOL + 2) {
                 return true;
-            } else {
-                const tryValue = readSquare(BOARD, pos);
-
-                if (!(tryValue !== false
-                    ? (pos !== rCtoPos(rowFixed, countCol)
-                        ? !sameValue(tryValue, rowFixed, countCol, BOARD)
-                        : true)
-                    : true)) {
-                    return false;
-                }
-                countCol++;
             }
+            const tryValue = readSquare(BOARD, pos);
+
+            if (!(tryValue !== false
+                ? (pos !== rCtoPos(rowFixed, countCol)
+                    ? !sameValue(tryValue, rowFixed, countCol, BOARD)
+                    : true)
+                : true)) {
+                return false;
+            }
+            countCol++;
         }
     }
 
@@ -317,8 +339,8 @@ function getFirstRowFromBox(box) {
     }
 }
 
-// Convert 0-based row and column to Pos
 /**
+ * Convert 0-based row and column to Pos
  * @param {number} r
  * @param {number} c
  */
@@ -326,8 +348,8 @@ function rCtoPos(r, c) {
     return r * 9 + c;
 }
 
-// Produce value at given position on board.
 /**
+ * Produce value at given position on board.
  * @param {Board} bd
  * @param {number} p
  */
@@ -335,8 +357,8 @@ function readSquare(bd, p) {
     return bd[p];
 }
 
-// Produce new board with val at given position
 /**
+ * Produce new board with val at given position
  * @param {any[]} bd
  * @param {number} p
  * @param {any} nv
