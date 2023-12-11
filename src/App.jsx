@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import constant from './helpers/constant'
+import solver from './helpers/solver'
 import './App.css'
 
 const App = () => {
@@ -59,11 +61,9 @@ const App = () => {
 
     const handleOnChange = (e, index) => {
       const newValue = e.target.value.replace(/[^1-9]/g, '')
-      if (newValue) {
-        const newBoard = [...board]
-        newBoard[index] = newValue
-        setBoard(newBoard)
-      }
+      const newBoard = [...board]
+      newBoard[index] = newValue
+      setBoard(newBoard)
     }
 
     return (
@@ -94,17 +94,21 @@ const App = () => {
         {makeGrid}
       </div>
       <div className="buttons">
-        <button onClick={() => {}}>Solve</button>
-        <button onClick={() => {}}>Clear</button>
-        <button onClick={() => {}}>Clear Color</button>
+        <button onClick={() => setBoard(solver.directSolve(board))}>
+          Direct Solve
+        </button>
+        <button onClick={() => solver.showSolve(board, setBoard)}>Solve</button>
+        <button onClick={() => setBoard(Array(size ** 2).fill(''))}>
+          Clear
+        </button>
       </div>
       <div className="buttons">
-        <button onClick={() => {}}>BD2</button>
-        <button onClick={() => {}}>BD3</button>
-        <button onClick={() => {}}>BD4</button>
-        <button onClick={() => {}}>BD5</button>
-        <button onClick={() => {}}>BD6</button>
-        <button onClick={() => {}}>BD7</button>
+        <button onClick={() => setBoard(constant.BD2)}>BD2</button>
+        <button onClick={() => setBoard(constant.BD3)}>BD3</button>
+        <button onClick={() => setBoard(constant.BD4)}>BD4</button>
+        <button onClick={() => setBoard(constant.BD5)}>BD5</button>
+        <button onClick={() => setBoard(constant.BD6)}>BD6</button>
+        <button onClick={() => setBoard(constant.BD7)}>BD7</button>
       </div>
     </div>
   )
