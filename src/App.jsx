@@ -57,9 +57,13 @@ const App = () => {
       }
     }
 
-    const handleOnChange = (e) => {
+    const handleOnChange = (e, index) => {
       const newValue = e.target.value.replace(/[^1-9]/g, '')
-      e.target.value = newValue
+      if (newValue) {
+        const newBoard = [...board]
+        newBoard[index] = newValue
+        setBoard(newBoard)
+      }
     }
 
     return (
@@ -70,7 +74,8 @@ const App = () => {
         maxLength="1"
         style={style}
         onKeyDown={(e) => handleKeyDown(e, index)}
-        onChange={handleOnChange}
+        onChange={(e) => handleOnChange(e, index)}
+        value={board[index]}
       />
     )
   })
