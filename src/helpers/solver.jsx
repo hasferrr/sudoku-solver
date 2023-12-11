@@ -4,14 +4,21 @@ const toSolver = (board) => board.map((e) => (e === '' ? false : Number(e)))
 
 const toBoard = (board) => board.map((e) => (e === false ? '' : e))
 
+const abstractSolverFunction = (board, solverFunction, setBoard) => {
+  const solved = solverFunction(toSolver(board), setBoard)
+  if (solved === false) {
+    alert('Unsolvable board')
+    return toBoard(board)
+  }
+  return toBoard(solved)
+}
+
 const directSolve = (board) => {
-  const solved = sudokuSolver.solve(toSolver(board))
-  return solved === false ? toBoard(board) : toBoard(solved)
+  return abstractSolverFunction(board, sudokuSolver.solve)
 }
 
 const showSolve = (board, setBoard) => {
-  const solved = solve(toSolver(board), setBoard)
-  return solved === false ? toBoard(board) : toBoard(solved)
+  return abstractSolverFunction(board, solve, setBoard)
 }
 
 const solve = (bd, setBoard) => {

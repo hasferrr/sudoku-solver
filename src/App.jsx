@@ -95,9 +95,11 @@ const App = () => {
       </div>
       <div className="buttons">
         <button onClick={() => setBoard(solver.directSolve(board))}>
-          Direct Solve
+          Solve
         </button>
-        <button onClick={() => solver.showSolve(board, setBoard)}>Solve</button>
+        <button onClick={() => solver.showSolve(board, setBoard)}>
+          Solve (Delayed)
+        </button>
         <button onClick={() => setBoard(Array(size ** 2).fill(''))}>
           Clear
         </button>
