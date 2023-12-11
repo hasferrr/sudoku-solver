@@ -50,6 +50,11 @@ const App = () => {
       }
     }
 
+    const handleOnChange = (e) => {
+      const newValue = e.target.value.replace(/[^1-9]/g, '')
+      e.target.value = newValue
+    }
+
     return (
       <input
         key={index}
@@ -58,6 +63,7 @@ const App = () => {
         maxLength="1"
         style={style}
         onKeyDown={(e) => handleKeyDown(e, index)}
+        onChange={handleOnChange}
       />
     )
   })
