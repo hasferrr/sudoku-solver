@@ -1,32 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 
 const App = () => {
   const [size, setSize] = useState(9)
   const [board, setBoard] = useState(Array(size ** 2).fill(''))
 
+  const WIDTH = 3.75
+  const FONTSIZE = WIDTH / 2
+
   const makeGrid = board.map((_, index) => {
     const col = 1 + (index % size)
     const row = 1 + Math.floor(index / size)
 
-    const style = {}
-    const width = '3px'
+    const style = {
+      width: `${WIDTH}rem`,
+      height: `${WIDTH}rem`,
+      fontSize: `${FONTSIZE}rem`,
+    }
+    const border = '3px'
     const color = 'white'
 
     if (row % 3 === 0) {
-      style.borderBottomWidth = width
+      style.borderBottomWidth = border
       style.borderBottomColor = color
     }
     if (col % 3 === 0) {
-      style.borderRightWidth = width
+      style.borderRightWidth = border
       style.borderRightColor = color
     }
     if (row === 1) {
-      style.borderTopWidth = width
+      style.borderTopWidth = border
       style.borderTopColor = color
     }
     if (col === 1) {
-      style.borderLeftWidth = width
+      style.borderLeftWidth = border
       style.borderLeftColor = color
     }
 
@@ -69,19 +76,32 @@ const App = () => {
   })
 
   const boardStyle = {
-    maxWidth: `${size * 4}rem`,
+    maxWidth: `${size * WIDTH}rem`,
     display: 'grid',
     gridTemplateRows: `repeat(${size}, 1fr)`,
     gridTemplateColumns: `repeat(${size}, 1fr)`,
   }
 
   return (
-    <>
+    <div id="main">
       <h1>Sudoku Solver</h1>
       <div id="board" style={boardStyle}>
         {makeGrid}
       </div>
-    </>
+      <div className="buttons">
+        <button onClick={() => {}}>Solve</button>
+        <button onClick={() => {}}>Clear</button>
+        <button onClick={() => {}}>Clear Color</button>
+      </div>
+      <div className="buttons">
+        <button onClick={() => {}}>BD2</button>
+        <button onClick={() => {}}>BD3</button>
+        <button onClick={() => {}}>BD4</button>
+        <button onClick={() => {}}>BD5</button>
+        <button onClick={() => {}}>BD6</button>
+        <button onClick={() => {}}>BD7</button>
+      </div>
+    </div>
   )
 }
 
