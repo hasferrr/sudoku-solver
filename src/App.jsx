@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 const App = () => {
@@ -30,6 +30,26 @@ const App = () => {
       style.borderLeftColor = color
     }
 
+    const handleKeyDown = (e, currentIndex) => {
+      const delta = {
+        ArrowLeft: -1,
+        ArrowRight: 1,
+        ArrowUp: -size,
+        ArrowDown: size,
+      }
+      const newIndex = currentIndex + (delta[e.key] || 0)
+
+      if (newIndex >= 0 && newIndex < board.length) {
+        const inputSelected = document.querySelector(`.index-${newIndex}`)
+        inputSelected.focus()
+        setTimeout(() => {
+          if (inputSelected.value) {
+            inputSelected.select()
+          }
+        }, 5)
+      }
+    }
+
     return (
       <input
         key={index}
@@ -37,11 +57,13 @@ const App = () => {
         type="text"
         maxLength="1"
         style={style}
+        onKeyDown={(e) => handleKeyDown(e, index)}
       />
     )
   })
 
   const boardStyle = {
+    maxWidth: `${size * 4}rem`,
     display: 'grid',
     gridTemplateRows: `repeat(${size}, 1fr)`,
     gridTemplateColumns: `repeat(${size}, 1fr)`,
