@@ -108,4 +108,16 @@ const BD7 = [
     B, B, B, B, B, B, B, B, 9
 ]
 
-export default { BD1, BD2, BD3, BD4, BD5, BD6, BD7, BD4s, BD5s }
+const BD8 = [
+    B, B, B, B, B, B, B, B, 1,
+    B, B, B, B, B, B, B, B, 2,
+    B, B, B, B, B, B, B, B, 3,
+    9, 8, 7, 6, 5, 4, 3, 2, B,
+    B, B, B, B, B, B, B, B, 5,
+    B, B, B, B, B, B, B, B, 6,
+    B, B, B, B, B, B, B, B, 7,
+    B, B, B, B, B, B, B, B, 8,
+    B, B, B, B, B, B, B, B, 9,
+]
+
+export default { BD1, BD2, BD3, BD4, BD5, BD6, BD7, BD8, BD4s, BD5s }

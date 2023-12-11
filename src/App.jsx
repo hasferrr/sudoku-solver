@@ -111,6 +111,7 @@ const App = () => {
         <button onClick={() => setBoard(constant.BD5)}>BD5</button>
         <button onClick={() => setBoard(constant.BD6)}>BD6</button>
         <button onClick={() => setBoard(constant.BD7)}>BD7</button>
+        <button onClick={() => setBoard(constant.BD8)}>BD8</button>
       </div>
     </div>
   )
