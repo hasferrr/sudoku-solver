@@ -8,11 +8,11 @@ Sudoku Solver implements mutual recursion, generative recursion, and backtrackin
 
 Array of 1-9 number or false represents the sudoku board. False value in the array means the empty slot of the sudoku.
 
-In order to solve the Sudoku Board, the `solve(bd)` function tries to generate every possible valid *next board* of the Sudoku Board, by adding the numbers 1, 2, 3, 4, ..., 9 into the empty slots and saves them into the array, until it's full (or solved).
+In order to solve the Sudoku Board, the `solve(bd)` function tries to generate every possible valid _next board_ of the Sudoku Board, by adding the numbers 1, 2, 3, 4, ..., 9 into the empty slots and saves them into the array, until it's full (or solved).
 
 ![img1](../assets/img1.png?raw=true)
 
-For each new board in the array, it also generates new valid boards until the board is solved, meaning it is both *full* and *valid* (all slots occupied by numbers, without any duplicates in row, colum, and box) OR until it is unsolvable (no way to solve the given board).
+For each new board in the array, it also generates new valid boards until the board is solved, meaning it is both _full_ and _valid_ (all slots occupied by numbers, without any duplicates in row, colum, and box) OR until it is unsolvable (no way to solve the given board).
 
 ![img2](../assets/img2.png?raw=true)
 
@@ -21,27 +21,26 @@ For each new board in the array, it also generates new valid boards until the bo
 Here's my code:
 
 ```js
-function solve(bd) {
-
-    function solveBD(bd) {
-        if (isSolved(bd)) {
-            return bd;
-        }
-        return solveLOBD(nextBoards(bd));
+const solve = (bd) => {
+  const solveBD = (bd) => {
+    if (isSolved(bd)) {
+      return bd
     }
+    return solveLOBD(nextBoards(bd))
+  }
 
-    function solveLOBD(lobd) {
-        if (lobd.length === 0) {
-            return false;
-        }
-        let tryToSolve = solveBD(lobd[0]);
-        if (tryToSolve !== false) {
-            return tryToSolve;
-        }
-        return solveLOBD(lobd.slice(1));
+  const solveLOBD = (lobd) => {
+    if (lobd.length === 0) {
+      return false
     }
+    let tryToSolve = solveBD(lobd[0])
+    if (tryToSolve !== false) {
+      return tryToSolve
+    }
+    return solveLOBD(lobd.slice(1))
+  }
 
-    return solveBD(bd); // <------ Code starts here
+  return solveBD(bd) // <------ Code starts here
 }
 ```
 
