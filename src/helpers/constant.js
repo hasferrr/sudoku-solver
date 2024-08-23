@@ -1,6 +1,11 @@
-const B = ''
+//@ts-check
 
-const BD1 = [
+/**
+ * @type {false} B
+ */
+const B = false
+
+export const BD1 = [
     B, B, B, B, B, B, B, B, B,
     B, B, B, B, B, B, B, B, B,
     B, B, B, B, B, B, B, B, B,
@@ -12,7 +17,7 @@ const BD1 = [
     B, B, B, B, B, B, B, B, B
 ]
 
-const BD2 = [
+export const BD2 = [
     1, 2, 3, 4, 5, 6, 7, 8, 9,
     B, B, B, B, B, B, B, B, B,
     B, B, B, B, B, B, B, B, B,
@@ -24,7 +29,7 @@ const BD2 = [
     B, B, B, B, B, B, B, B, B
 ]
 
-const BD3 = [
+export const BD3 = [
     1, B, B, B, B, B, B, B, B,
     2, B, B, B, B, B, B, B, B,
     3, B, B, B, B, B, B, B, B,
@@ -36,7 +41,7 @@ const BD3 = [
     9, B, B, B, B, B, B, B, B
 ]
 
-const BD4 = [
+export const BD4 = [
     2, 7, 4, B, 9, 1, B, B, 5,
     1, B, B, 5, B, B, B, 9, B,
     6, B, B, B, B, 3, 2, 8, B,
@@ -48,7 +53,7 @@ const BD4 = [
     8, B, B, 3, 4, 9, B, B, B
 ]
 
-const BD4s = [
+export const BD4s = [
     2, 7, 4, 8, 9, 1, 3, 6, 5,
     1, 3, 8, 5, 2, 6, 4, 9, 7,
     6, 5, 9, 4, 7, 3, 2, 8, 1,
@@ -60,7 +65,7 @@ const BD4s = [
     8, 1, 7, 3, 4, 9, 5, 2, 6
 ]
 
-const BD5 = [
+export const BD5 = [
     5, B, B, B, B, 4, B, 7, B,
     B, 1, B, B, 5, B, 6, B, B,
     B, B, 4, 9, B, B, B, B, B,
@@ -72,7 +77,7 @@ const BD5 = [
     B, B, 8, B, 7, B, B, 3, 1
 ]
 
-const BD5s = [
+export const BD5s = [
     5, 3, 9, 1, 6, 4, 8, 7, 2,
     8, 1, 2, 7, 5, 3, 6, 9, 4,
     6, 7, 4, 9, 2, 8, 3, 1, 5,
@@ -84,7 +89,7 @@ const BD5s = [
     4, 5, 8, 6, 7, 9, 2, 3, 1
 ]
 
-const BD6 = [
+export const BD6 = [
     B, B, 5, 3, B, B, B, B, B,
     8, B, B, B, B, B, B, 2, B,
     B, 7, B, B, 1, B, 5, B, B,
@@ -96,7 +101,7 @@ const BD6 = [
     B, B, B, B, B, 9, 7, B, B
 ]
 
-const BD7 = [
+export const BD7 = [
     1, 2, 3, 4, 5, 6, 7, 8, B,
     B, B, B, B, B, B, B, B, 2,
     B, B, B, B, B, B, B, B, 3,
@@ -107,17 +112,3 @@ const BD7 = [
     B, B, B, B, B, B, B, B, 8,
     B, B, B, B, B, B, B, B, 9
 ]
-
-const BD8 = [
-    B, B, B, B, B, B, B, B, 1,
-    B, B, B, B, B, B, B, B, 2,
-    B, B, B, B, B, B, B, B, 3,
-    9, 8, 7, 6, 5, 4, 3, 2, B,
-    B, B, B, B, B, B, B, B, 5,
-    B, B, B, B, B, B, B, B, 6,
-    B, B, B, B, B, B, B, B, 7,
-    B, B, B, B, B, B, B, B, 8,
-    B, B, B, B, B, B, B, B, 9,
-]
-
-export default { BD1, BD2, BD3, BD4, BD5, BD6, BD7, BD8, BD4s, BD5s }
