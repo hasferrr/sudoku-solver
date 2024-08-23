@@ -1,38 +1,3 @@
-/**
- * @type {Element | null}
- */
-const container = document.querySelector('.container')
-
-export function makeSudokuGrid() {
-  const size = 9
-
-  let col = document.createElement('div')
-  col.classList.add('col')
-
-  let box = document.createElement('div')
-  box.classList.add('box')
-
-  let inputBox = document.createElement('input')
-  inputBox.classList.add('in')
-  inputBox.maxLength = 1
-  inputBox.autocomplete = 'off'
-
-  for (let i = 0; i < size; i++) {
-    let boxtoadd = box.cloneNode(true)
-    boxtoadd.classList.add('b' + i)
-    let inputNew = inputBox.cloneNode(true)
-    inputNew.classList.add('ib' + i)
-    boxtoadd.appendChild(inputNew)
-    col.appendChild(boxtoadd)
-  }
-
-  for (let i = 0; i < size; i++) {
-    let coltoadd = col.cloneNode(true)
-    coltoadd.classList.add('c' + i)
-    container?.appendChild(coltoadd)
-  }
-}
-
 export function enableArrowKeysToNavigateInputs() {
   // Get all the input elements
   const inputs = document.querySelectorAll('input')
