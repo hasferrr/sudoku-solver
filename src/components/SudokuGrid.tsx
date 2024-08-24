@@ -17,6 +17,7 @@ const SudokuGrid = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>, row: number, col: number) => {
     const val = e.target.value.replace(/[^1-9]/g, '')
     updateGrid(row, col, Number(val))
+    e.target.style.backgroundColor = 'transparent'
   }
 
   return (
@@ -27,7 +28,7 @@ const SudokuGrid = () => {
             <div key={colIndex} className={`box c${colIndex}`}>
               <input
                 ref={(el) => (inputRefs.current[rowIndex * SIZE + colIndex] = el!)}
-                className={`in ib${colIndex}`}
+                className={`in r${rowIndex} c${colIndex}`}
                 maxLength={1}
                 autoComplete="off"
                 type="text"

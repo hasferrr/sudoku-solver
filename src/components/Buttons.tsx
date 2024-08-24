@@ -1,4 +1,4 @@
-import { useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
+import { useGrid, useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
 import { useCopyGrid } from '../hooks/useCopyGrid'
 
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
@@ -10,19 +10,21 @@ const Buttons = () => {
   const resetGrid = useResetGrid()
   const setGrid = useSetGrid()
   const copyGrid = useCopyGrid()
+  const grid = useGrid()
 
-  const clearColor = () => {
+  const handleClear = () => {
+    resetGrid()
     clearGridColor(inputRefs.current)
   }
 
   const handleDemoButton = (board: number[][]) => {
-    resetGrid()
-    clearColor()
+    handleClear()
     setGrid(board)
   }
 
   const handleSolve = () => {
     const isSolved = solveSudoku(copyGrid)
+
     if (isSolved === null) {
       alert('Board is invalid')
     }
@@ -31,16 +33,24 @@ const Buttons = () => {
     }
     setGrid(copyGrid)
     clearGridColor(inputRefs.current)
-    console.log(inputRefs)
-    // input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
+
+    if (isSolved) {
+      inputRefs.current.forEach((input) => {
+        const rowIndex = Number(input.classList[1][1])
+        const colIndex = Number(input.classList[2][1])
+        if (!grid[rowIndex][colIndex]) {
+          input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
+        }
+      })
+    }
   }
 
   return (
     <>
       <div className="buttons">
         <button onClick={handleSolve}>Solve</button>
-        <button onClick={resetGrid}>Clear</button>
-        <button onClick={clearColor}>Clear Color</button>
+        <button onClick={handleClear}>Clear</button>
+        <button onClick={() => clearGridColor(inputRefs.current)}>Clear Color</button>
       </div>
       <div className="demo">
         <button onClick={() => handleDemoButton(BD2)}>BD2</button>
