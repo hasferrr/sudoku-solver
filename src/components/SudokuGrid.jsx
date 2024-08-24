@@ -1,26 +1,27 @@
-import { useEffect, useRef } from 'react'
-import {
-  enableArrowKeysToNavigateInputs,
-  onlyNumber,
-} from '../helpers/sudokuLogic'
+import { useEffect } from 'react'
+import { enableArrowKeysToNavigateInputs } from '../helpers/sudokuLogic'
+import { useGrid, useGridSize, useInputRefs, useUpdateGrid } from '../contexts/GridContext'
 
 const SudokuGrid = () => {
+  const SIZE = useGridSize()
+  const grid = useGrid()
+  const updateGrid = useUpdateGrid()
+  const inputRefs = useInputRefs()
+
   useEffect(() => {
-    enableArrowKeysToNavigateInputs()
-    onlyNumber()
-  }, [])
+    enableArrowKeysToNavigateInputs(inputRefs.current)
+  }, [grid])
 
-  const SIZE = 9
-  const rows = Array.from({ length: SIZE }, (_, rowIndex) => rowIndex)
-  const columns = Array.from({ length: SIZE }, (_, colIndex) => colIndex)
-
-  const inputRefs = useRef(Array(SIZE * SIZE))
+  const handleChange = (e, row, col) => {
+    const val = e.target.value.replace(/[^1-9]/g, '')
+    updateGrid(row, col, val)
+  }
 
   return (
     <div className="container">
-      {rows.map((rowIndex) => (
+      {grid.map((_, rowIndex) => (
         <div key={rowIndex} className={`col c${rowIndex}`}>
-          {columns.map((colIndex) => (
+          {grid[0].map((_, colIndex) => (
             <div key={colIndex} className={`box b${colIndex}`}>
               <input
                 ref={(el) => (inputRefs.current[rowIndex * SIZE + colIndex] = el)}
@@ -28,6 +29,8 @@ const SudokuGrid = () => {
                 maxLength={1}
                 autoComplete="off"
                 type="text"
+                value={grid[rowIndex][colIndex] || ''}
+                onChange={(e) => handleChange(e, rowIndex, colIndex)}
               />
             </div>
           ))}

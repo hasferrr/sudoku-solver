@@ -1,7 +1,6 @@
-export function enableArrowKeysToNavigateInputs() {
-  // Get all the input elements
-  const inputs = document.querySelectorAll('input')
+import { solve, validBoard } from './sudokuSolver'
 
+export function enableArrowKeysToNavigateInputs(inputs) {
   // Add keydown event listener to the inputs
   inputs.forEach((input) => {
     input.addEventListener('keydown', (e) => {
@@ -45,65 +44,9 @@ export function enableArrowKeysToNavigateInputs() {
   })
 }
 
-export function onlyNumber() {
-  // Get all the input elements with class "in"
-  const inputFields = document.querySelectorAll('.in')
-
-  // Add input event listener to the input fields
-  inputFields.forEach((input) => {
-    input.addEventListener('input', (e) => {
-      // Remove any non-numeric characters from the input value
-      const newValue = e.target.value.replace(/[^1-9]/g, '')
-      e.target.value = newValue
-    })
-  })
-}
-
-export function clearInputValues() {
-  const inputs = document.querySelectorAll('.in')
-
-  inputs.forEach((input) => {
-    input.value = ''
-    input.style.backgroundColor = 'transparent'
-  })
-}
-
-export function clearBackgroundColor() {
-  const inputs = document.querySelectorAll('.in')
-  inputs.forEach((input) => {
-    input.style.backgroundColor = 'transparent'
-  })
-}
-
-export function viewSolvedBoard() {
-  let newSolvedBoard = solveRightNow()
-  if (newSolvedBoard === 1) {
-    alert('Board is invalid')
-    return
-  } else if (newSolvedBoard === 2) {
-    alert('Unsolvable board')
-    return
-  } else {
-    setInputValues(newSolvedBoard)
-  }
-}
-
-export function setInputValues(board) {
-  const inputs = document.querySelectorAll('.in')
-  clearBackgroundColor()
-  inputs.forEach((input, index) => {
-    if (input.value.trim() === '') {
-      input.value = board[index] || ''
-      input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
-    }
-  })
-}
-
-import { solve, validBoard } from './sudokuSolver'
-
 export function solveRightNow() {
   let board = getInputValues()
-  let validity = checkValidity(board)
+  let validity = validBoard(board)
   if (!validity) {
     return 1 // Invalid board
   }
@@ -127,8 +70,4 @@ function getInputValues() {
     values[i] = element
   }
   return values
-}
-
-function checkValidity(bd) {
-  return validBoard(bd)
 }
