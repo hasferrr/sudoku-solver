@@ -22,16 +22,16 @@ const Buttons = () => {
   }
 
   const handleSolve = () => {
-    let validity = true // FIXME: check grid validity
-    if (!validity) {
+    const isSolved = solveSudoku(copyGrid)
+    if (isSolved === null) {
       alert('Board is invalid')
     }
-    let isSolved = solveSudoku(copyGrid)
     if (isSolved === false) {
       alert('Unsolvable board')
     }
     setGrid(copyGrid)
     clearGridColor(inputRefs.current)
+    console.log(inputRefs)
     // input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
   }
 

@@ -1,4 +1,4 @@
-export const solveSudoku = (board: number[][]): boolean => {
+export const solveSudoku = (board: number[][]): boolean | null => {
   const MAX = 9
   const ROW_SET = new Map<number, Set<number>>()
   const COL_SET = new Map<number, Set<number>>()
@@ -15,12 +15,8 @@ export const solveSudoku = (board: number[][]): boolean => {
       if (!BOX_SET.has(boxIndex)) BOX_SET.set(boxIndex, new Set())
 
       // is input board valid?
-      if (
-        ROW_SET.get(i)!.has(board[i][j])
-        || COL_SET.get(j)!.has(board[i][j])
-        || BOX_SET.get(boxIndex)!.has(board[i][j])
-      ) {
-        return false
+      if (!isValid(i, j, board[i][j])) {
+        return null
       }
 
       if (board[i][j] === 0) {
