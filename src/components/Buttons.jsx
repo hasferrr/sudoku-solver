@@ -1,4 +1,4 @@
-import { solveRightNow } from '../helpers/sudokuLogic'
+import { solveSudoku } from '../helpers/sudokuLogic'
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
 import { clearGridColor } from '../helpers/gridEvent'
@@ -12,16 +12,6 @@ const Buttons = () => {
     clearGridColor(inputRefs.current)
   }
 
-  const setInputValues = (inputs, board) => {
-    clearColor()
-    inputs.forEach((input, index) => {
-      if (input.value.trim() === '') {
-        input.value = board[index] || ''
-        input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
-      }
-    })
-  }
-
   const handleDemoButton = (board) => {
     resetGrid()
     clearColor()
@@ -29,16 +19,7 @@ const Buttons = () => {
   }
 
   const handleSolve = () => {
-    let newSolvedBoard = solveRightNow()
-    if (newSolvedBoard === 1) {
-      alert('Board is invalid')
-      return
-    } else if (newSolvedBoard === 2) {
-      alert('Unsolvable board')
-      return
-    } else {
-      setInputValues(inputRefs.current, newSolvedBoard)
-    }
+    solveSudoku(inputRefs.current)
   }
 
   return (

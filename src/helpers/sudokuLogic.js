@@ -1,6 +1,30 @@
+import { clearGridColor } from './gridEvent'
 import { solve, validBoard } from './sudokuSolver'
 
-export function solveRightNow() {
+export function solveSudoku(inputs) {
+  let newSolvedBoard = solveRightNow()
+  if (newSolvedBoard === 1) {
+    alert('Board is invalid')
+    return
+  } else if (newSolvedBoard === 2) {
+    alert('Unsolvable board')
+    return
+  } else {
+    setInputValues(inputs, newSolvedBoard)
+  }
+}
+
+function setInputValues(inputs, board) {
+  clearGridColor(inputs)
+  inputs.forEach((input, index) => {
+    if (input.value.trim() === '') {
+      input.value = board[index] || ''
+      input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
+    }
+  })
+}
+
+function solveRightNow() {
   let board = getInputValues()
   let validity = validBoard(board)
   if (!validity) {
