@@ -1,4 +1,4 @@
-export function enableArrowKeysToNavigateInputs(inputs) {
+export function enableArrowKeysToNavigateInputs(inputs: HTMLInputElement[]) {
   // Add keydown event listener to the inputs
   inputs.forEach((input) => {
     input.addEventListener('keydown', (e) => {
@@ -6,7 +6,7 @@ export function enableArrowKeysToNavigateInputs(inputs) {
       const currentIndex = Array.from(inputs).indexOf(input)
 
       // Calculate the index of the input to navigate to
-      let newIndex
+      let newIndex: number | undefined = undefined
       switch (e.key) {
         case 'ArrowLeft':
           // Left arrow key
@@ -27,7 +27,7 @@ export function enableArrowKeysToNavigateInputs(inputs) {
       }
 
       // Check if the new index is within bounds
-      if (newIndex >= 0 && newIndex < inputs.length) {
+      if (newIndex && newIndex >= 0 && newIndex < inputs.length) {
         // Focus on the new input
         inputs[newIndex].focus()
 
@@ -42,7 +42,7 @@ export function enableArrowKeysToNavigateInputs(inputs) {
   })
 }
 
-export function clearGridColor(inputs) {
+export function clearGridColor(inputs: HTMLInputElement[]) {
   inputs.forEach((input) => {
     input.style.backgroundColor = 'transparent'
   })

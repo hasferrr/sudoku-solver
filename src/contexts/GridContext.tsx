@@ -1,12 +1,19 @@
 import { createContext, useContext, useRef, useState } from 'react'
 
-const GridContext = createContext()
+interface GridContextType {
+  grid: number[][]
+  setGrid: React.Dispatch<React.SetStateAction<number[][]>>
+  SIZE: number
+  inputRefs: React.MutableRefObject<(HTMLInputElement)[]>
+}
 
-const createNewGrid = (n) => {
+const GridContext = createContext<GridContextType>(null!)
+
+const createNewGrid = (n: number) => {
   return Array.from({ length: n }, () => Array(n).fill(''))
 }
 
-export const GridContextProvider = ({ children }) => {
+export const GridContextProvider = ({ children }: { children?: React.ReactNode }) => {
   const SIZE = 9
   const [grid, setGrid] = useState(createNewGrid(SIZE))
   const inputRefs = useRef(Array(SIZE * SIZE))
@@ -28,7 +35,7 @@ export const useSetGrid = () => {
 
 export const useUpdateGrid = () => {
   const { grid, setGrid, SIZE } = useContext(GridContext)
-  return (row, col, val) => {
+  return (row: number, col: number, val: number) => {
     const newGrid = Array(SIZE)
     for (let i = 0; i < SIZE; i++) newGrid[i] = [...grid[i]]
     newGrid[row][col] = val

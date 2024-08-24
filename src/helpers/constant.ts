@@ -1,4 +1,4 @@
-const _ = ""
+const _ = 0
 
 export const BD1 = [
     [_, _, _, _, _, _, _, _, _],

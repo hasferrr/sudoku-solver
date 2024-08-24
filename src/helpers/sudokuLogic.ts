@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { clearGridColor } from './gridEvent'
 import { solve, validBoard } from './sudokuSolver'
 

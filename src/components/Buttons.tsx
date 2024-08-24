@@ -1,7 +1,8 @@
-import { solveSudoku } from '../helpers/sudokuLogic'
-import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
+
+import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { clearGridColor } from '../helpers/gridEvent'
+import { solveSudoku } from '../helpers/sudokuLogic'
 
 const Buttons = () => {
   const inputRefs = useInputRefs()
@@ -12,7 +13,7 @@ const Buttons = () => {
     clearGridColor(inputRefs.current)
   }
 
-  const handleDemoButton = (board) => {
+  const handleDemoButton = (board: number[][]) => {
     resetGrid()
     clearColor()
     setGrid(board)

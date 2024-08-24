@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
-import { enableArrowKeysToNavigateInputs } from '../helpers/gridEvent'
+import { ChangeEvent, useEffect } from 'react'
+
 import { useGrid, useGridSize, useInputRefs, useUpdateGrid } from '../contexts/GridContext'
+
+import { enableArrowKeysToNavigateInputs } from '../helpers/gridEvent'
 
 const SudokuGrid = () => {
   const SIZE = useGridSize()
@@ -12,9 +14,9 @@ const SudokuGrid = () => {
     enableArrowKeysToNavigateInputs(inputRefs.current)
   }, [grid])
 
-  const handleChange = (e, row, col) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, row: number, col: number) => {
     const val = e.target.value.replace(/[^1-9]/g, '')
-    updateGrid(row, col, val)
+    updateGrid(row, col, Number(val))
   }
 
   return (
@@ -24,7 +26,7 @@ const SudokuGrid = () => {
           {grid[0].map((_, colIndex) => (
             <div key={colIndex} className={`box b${colIndex}`}>
               <input
-                ref={(el) => (inputRefs.current[rowIndex * SIZE + colIndex] = el)}
+                ref={(el) => (inputRefs.current[rowIndex * SIZE + colIndex] = el!)}
                 className={`in ib${colIndex}`}
                 maxLength={1}
                 autoComplete="off"
