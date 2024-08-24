@@ -9,8 +9,8 @@ interface GridContextType {
 
 const GridContext = createContext<GridContextType>(null!)
 
-const createNewGrid = (n: number) => {
-  return Array.from({ length: n }, () => Array(n).fill(''))
+const createNewGrid = (n: number): number[][] => {
+  return Array.from({ length: n }, () => Array(n).fill(0))
 }
 
 export const GridContextProvider = ({ children }: { children?: React.ReactNode }) => {

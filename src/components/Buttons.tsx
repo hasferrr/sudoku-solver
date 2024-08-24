@@ -1,13 +1,15 @@
 import { useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
+import { useCopyGrid } from '../hooks/useCopyGrid'
 
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { clearGridColor } from '../helpers/gridEvent'
-import { solveSudoku } from '../helpers/sudokuLogic'
+import { solveSudoku } from '../helpers/solveSudoku'
 
 const Buttons = () => {
   const inputRefs = useInputRefs()
   const resetGrid = useResetGrid()
   const setGrid = useSetGrid()
+  const copyGrid = useCopyGrid()
 
   const clearColor = () => {
     clearGridColor(inputRefs.current)
@@ -20,7 +22,17 @@ const Buttons = () => {
   }
 
   const handleSolve = () => {
-    solveSudoku(inputRefs.current)
+    let validity = true // FIXME: check grid validity
+    if (!validity) {
+      alert('Board is invalid')
+    }
+    let isSolved = solveSudoku(copyGrid)
+    if (isSolved === false) {
+      alert('Unsolvable board')
+    }
+    setGrid(copyGrid)
+    clearGridColor(inputRefs.current)
+    // input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
   }
 
   return (
