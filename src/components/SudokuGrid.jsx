@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { enableArrowKeysToNavigateInputs } from '../helpers/sudokuLogic'
+import { enableArrowKeysToNavigateInputs } from '../helpers/gridEvent'
 import { useGrid, useGridSize, useInputRefs, useUpdateGrid } from '../contexts/GridContext'
 
 const SudokuGrid = () => {
