@@ -1,10 +1,16 @@
 # Sudoku Solver
 
-Sudoku Solver implements mutual recursion, generative recursion, and backtracking search to solve 9x9 Sudoku puzzles. It explores all valid number possibilities and selects the first available solution from the 'next-board' node.
+![demo](../assets/demo.gif?raw=true)
+
+## Detail
+
+Sudoku Solver implements mutual recursion, generative recursion, and backtracking search to solve 9x9 Sudoku puzzles. It explores all valid number possibilities and selects the first available solution.
 
 [Live Demo](https://hasferrr.github.io/sudoku-solver)
 
-## Detail
+<details>
+    <summary> Click to expand </summary>
+    <br>
 
 Array of 1-9 number or false represents the sudoku board. False value in the array means the empty slot of the sudoku.
 
@@ -16,36 +22,4 @@ For each new board in the array, it also generates new valid boards until the bo
 
 ![img2](../assets/img2.png?raw=true)
 
-## Code explained
-
-Here's my code:
-
-```js
-const solve = (bd) => {
-  const solveBD = (bd) => {
-    if (isSolved(bd)) {
-      return bd
-    }
-    return solveLOBD(nextBoards(bd))
-  }
-
-  const solveLOBD = (lobd) => {
-    if (lobd.length === 0) {
-      return false
-    }
-    let tryToSolve = solveBD(lobd[0])
-    if (tryToSolve !== false) {
-      return tryToSolve
-    }
-    return solveLOBD(lobd.slice(1))
-  }
-
-  return solveBD(bd) // <------ Code starts here
-}
-```
-
-- Look at the `solveBD(bd)` function.
-- As you can see, if `bd` (the given board) is not a solved sudoku board, then generate 9 or less new valid next boards and store them into the array.
-- Array of the next board will be handled by `solveLOBD(bd)` function, as you can see in the return value `return solveLOBD(nextBoards(bd))`.
-- Then, every Board in the array will be handled back by `solveBD(bd)` function.
-- The process will back and forth between `solveBD` and `solveLOBD` (mutual recursion), until it's solved (or not solved).
+</details>
