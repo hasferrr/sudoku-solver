@@ -1,4 +1,6 @@
-export const solveSudoku = (board: number[][]): boolean | null => {
+import { QueueObject } from "../components/Buttons"
+
+export const solveSudoku = (board: number[][], queue?: QueueObject[]): boolean | null => {
   const MAX = 9
   const ROW_SET = new Map<number, Set<number>>()
   const COL_SET = new Map<number, Set<number>>()
@@ -46,9 +48,19 @@ export const solveSudoku = (board: number[][]): boolean | null => {
     for (let i = 1; i <= 9; i++) {
       if (!isValid(row, col, i)) continue
       setBoard(row, col, i)
+      queue?.push({
+        row,
+        col,
+        val: i,
+      })
       if (solve()) return true
     }
     setBoard(row, col, 0)
+    queue?.push({
+      row,
+      col,
+      val: 0,
+    })
     return false
   }
 

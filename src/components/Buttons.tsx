@@ -1,9 +1,17 @@
 import { useGrid, useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
+import { useQueueRef } from '../contexts/QueueGridContext'
 import { useCopyGrid } from '../hooks/useCopyGrid'
 
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { clearGridColor } from '../helpers/gridEvent'
 import { solveSudoku } from '../helpers/solveSudoku'
+import { copy } from '../helpers/helpers'
+
+export interface QueueObject {
+  row: number
+  col: number
+  val: number
+}
 
 const Buttons = () => {
   const inputRefs = useInputRefs()
@@ -11,6 +19,7 @@ const Buttons = () => {
   const setGrid = useSetGrid()
   const copyGrid = useCopyGrid()
   const grid = useGrid()
+  const queueRef = useQueueRef()
 
   const handleClear = () => {
     resetGrid()
@@ -22,7 +31,7 @@ const Buttons = () => {
     setGrid(board)
   }
 
-  const handleSolve = () => {
+  const handleDirectSolve = () => {
     const isSolved = solveSudoku(copyGrid)
 
     if (isSolved === null) {
@@ -45,10 +54,57 @@ const Buttons = () => {
     }
   }
 
+  const handleDelayedSolve = () => {
+    const queue: QueueObject[] = []
+    let queueCopy = copy(copyGrid)
+
+    const isSolved = solveSudoku(copyGrid, queue)
+
+    if (isSolved === null) {
+      alert('Board is invalid')
+    }
+
+    queueRef.current = []
+
+    const processQueue = () => {
+      if (queue.length === 0) {
+        inputRefs.current.forEach((input) => {
+          const rowIndex = Number(input.classList[1][1])
+          const colIndex = Number(input.classList[2][1])
+          if (!grid[rowIndex][colIndex]) {
+            input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
+          }
+        })
+        return
+      }
+
+      const { row, col, val } = queue.shift()!
+      const copiedCopyGrid = copy(queueCopy)
+      copiedCopyGrid[row][col] = val
+      queueCopy = copiedCopyGrid
+
+      queueRef.current.push(
+        setTimeout(() => {
+          setGrid(copiedCopyGrid)
+          setTimeout(processQueue, 0)
+        }, 0)
+      )
+    }
+
+    processQueue()
+
+    if (isSolved === false) {
+      alert('Unsolvable board')
+    }
+
+    clearGridColor(inputRefs.current)
+  }
+
   return (
     <>
       <div className="buttons">
-        <button onClick={handleSolve}>Solve</button>
+        <button onClick={handleDirectSolve}>Solve</button>
+        <button onClick={handleDelayedSolve}>Solve (Delayed)</button>
         <button onClick={handleClear}>Clear</button>
         <button onClick={() => clearGridColor(inputRefs.current)}>Clear Color</button>
       </div>

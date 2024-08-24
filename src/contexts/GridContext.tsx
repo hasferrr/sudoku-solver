@@ -1,5 +1,7 @@
 import { createContext, useContext, useRef, useState } from 'react'
 
+import { copy } from '../helpers/helpers'
+
 interface GridContextType {
   grid: number[][]
   setGrid: React.Dispatch<React.SetStateAction<number[][]>>
@@ -34,10 +36,9 @@ export const useSetGrid = () => {
 }
 
 export const useUpdateGrid = () => {
-  const { grid, setGrid, SIZE } = useContext(GridContext)
+  const { grid, setGrid } = useContext(GridContext)
   return (row: number, col: number, val: number) => {
-    const newGrid = Array(SIZE)
-    for (let i = 0; i < SIZE; i++) newGrid[i] = [...grid[i]]
+    const newGrid = copy(grid)
     newGrid[row][col] = val
     setGrid(newGrid)
   }
