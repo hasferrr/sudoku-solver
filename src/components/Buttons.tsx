@@ -1,5 +1,5 @@
 import { useGrid, useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
-import { useQueueRef } from '../contexts/QueueGridContext'
+import { useIsProcessingRef, useQueueRef } from '../contexts/QueueGridContext'
 import { useCopyGrid } from '../hooks/useCopyGrid'
 
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
@@ -20,10 +20,16 @@ const Buttons = () => {
   const copyGrid = useCopyGrid()
   const grid = useGrid()
   const queueRef = useQueueRef()
+  const isProcessingRef = useIsProcessingRef()
 
   const handleClear = () => {
+    isProcessingRef.current = false
     resetGrid()
     clearGridColor(inputRefs.current)
+    while (queueRef.current.length) {
+      clearTimeout(queueRef.current.pop())
+    }
+    resetGrid()
   }
 
   const handleDemoButton = (board: number[][]) => {
@@ -55,6 +61,10 @@ const Buttons = () => {
   }
 
   const handleDelayedSolve = () => {
+    if (isProcessingRef.current) {
+      return
+    }
+
     const queue: QueueObject[] = []
     let queueCopy = copy(copyGrid)
 
@@ -64,17 +74,22 @@ const Buttons = () => {
       alert('Board is invalid')
     }
 
-    queueRef.current = []
-
     const processQueue = () => {
-      if (queue.length === 0) {
-        inputRefs.current.forEach((input) => {
-          const rowIndex = Number(input.classList[1][1])
-          const colIndex = Number(input.classList[2][1])
-          if (!grid[rowIndex][colIndex]) {
-            input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
-          }
-        })
+      if (!isProcessingRef.current) {
+        return
+      }
+
+      if (!queue.length) {
+        isProcessingRef.current = false
+        if (isSolved) {
+          inputRefs.current.forEach((input) => {
+            const rowIndex = Number(input.classList[1][1])
+            const colIndex = Number(input.classList[2][1])
+            if (!grid[rowIndex][colIndex]) {
+              input.style.backgroundColor = 'rgb(158 183 206 / 26%)'
+            }
+          })
+        }
         return
       }
 
@@ -91,6 +106,8 @@ const Buttons = () => {
       )
     }
 
+    queueRef.current = []
+    isProcessingRef.current = true
     processQueue()
 
     if (isSolved === false) {

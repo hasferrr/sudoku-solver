@@ -9,7 +9,7 @@ const QueueGridContext = createContext<QueueGridContextType>(null!)
 
 export const QueueGridContextProvider = ({ children }: { children?: React.ReactNode }) => {
   const queue = useRef<number[]>([])
-  const isProcessing = useRef<boolean>(true)
+  const isProcessing = useRef<boolean>(false)
 
   return (
     <QueueGridContext.Provider value={{ queue, isProcessing }}>
@@ -22,7 +22,7 @@ export const useQueueRef = () => {
   return useContext(QueueGridContext).queue
 }
 
-export const useIsProcessing = () => {
+export const useIsProcessingRef = () => {
   return useContext(QueueGridContext).isProcessing
 }
 
