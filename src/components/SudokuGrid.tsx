@@ -22,9 +22,9 @@ const SudokuGrid = () => {
   return (
     <div className="container">
       {grid.map((_, rowIndex) => (
-        <div key={rowIndex} className={`col c${rowIndex}`}>
+        <div key={rowIndex} className={`row r${rowIndex}`}>
           {grid[0].map((_, colIndex) => (
-            <div key={colIndex} className={`box b${colIndex}`}>
+            <div key={colIndex} className={`box c${colIndex}`}>
               <input
                 ref={(el) => (inputRefs.current[rowIndex * SIZE + colIndex] = el!)}
                 className={`in ib${colIndex}`}

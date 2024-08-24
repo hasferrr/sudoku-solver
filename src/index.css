@@ -39,7 +39,7 @@ button {
     border: 3px solid #666699;
 }
 
-.col, .box, .in {
+.row, .box, .in {
     width: 58px;
     height: 58px;
     margin: 0;
@@ -52,7 +52,7 @@ button {
     font-size: 32px;
 }
 
-.col {
+.row {
     width: 522px;
     display: flex;
 }
@@ -62,14 +62,14 @@ button {
     border-bottom: 1px solid #DDDDEE;
 }
 
-.b2, .b5 {
+.c2, .c5 {
     border-right: 3px solid #666699;
 }
 
-.b8 {
+.c8 {
     border-right: 0px;
 }
 
-.c2, .c5 {
+.r2, .r5 {
     border-bottom: 3px solid #666699;
 }
