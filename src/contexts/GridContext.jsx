@@ -22,6 +22,10 @@ export const useGrid = () => {
   return useContext(GridContext).grid
 }
 
+export const useSetGrid = () => {
+  return useContext(GridContext).setGrid
+}
+
 export const useUpdateGrid = () => {
   const { grid, setGrid, SIZE } = useContext(GridContext)
   return (row, col, val) => {

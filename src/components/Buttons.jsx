@@ -1,10 +1,11 @@
 import { solveRightNow } from '../helpers/sudokuLogic'
 import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
-import { useInputRefs, useResetGrid } from '../contexts/GridContext'
+import { useInputRefs, useResetGrid, useSetGrid } from '../contexts/GridContext'
 
 const Buttons = () => {
   const inputRefs = useInputRefs()
   const resetGrid = useResetGrid()
+  const setGrid = useSetGrid()
 
   const clearColor = () => {
     inputRefs.current.forEach((input) => {
@@ -25,7 +26,7 @@ const Buttons = () => {
   const handleDemoButton = (board) => {
     resetGrid()
     clearColor()
-    setInputValues(inputRefs.current, board)
+    setGrid(board)
   }
 
   const handleSolve = () => {
