@@ -1,14 +1,14 @@
 import { createContext, useContext, useRef } from 'react'
 
 interface QueueGridContextType {
-  queue: React.MutableRefObject<number[]>
+  queue: React.MutableRefObject<number | null>
   isProcessing: React.MutableRefObject<boolean>
 }
 
 const QueueGridContext = createContext<QueueGridContextType>(null!)
 
 export const QueueGridContextProvider = ({ children }: { children?: React.ReactNode }) => {
-  const queue = useRef<number[]>([])
+  const queue = useRef<number | null>(null)
   const isProcessing = useRef<boolean>(false)
 
   return (

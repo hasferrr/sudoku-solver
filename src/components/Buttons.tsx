@@ -24,10 +24,10 @@ const Buttons = () => {
 
   const handleClear = () => {
     isProcessingRef.current = false
-    resetGrid()
     clearGridColor(inputRefs.current)
-    while (queueRef.current.length) {
-      clearTimeout(queueRef.current.pop())
+    while (queueRef.current !== null) {
+      clearTimeout(queueRef.current)
+      queueRef.current = null
     }
     resetGrid()
   }
@@ -98,15 +98,13 @@ const Buttons = () => {
       copiedCopyGrid[row][col] = val
       queueCopy = copiedCopyGrid
 
-      queueRef.current.push(
-        setTimeout(() => {
-          setGrid(copiedCopyGrid)
-          setTimeout(processQueue, 0)
-        }, 0)
-      )
+      queueRef.current = setTimeout(() => {
+        setGrid(copiedCopyGrid)
+        processQueue()
+      }, 0)
     }
 
-    queueRef.current = []
+    queueRef.current = null
     isProcessingRef.current = true
     processQueue()
 
