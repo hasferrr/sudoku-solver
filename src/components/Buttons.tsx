@@ -6,6 +6,7 @@ import { BD2, BD3, BD4, BD5, BD6, BD7 } from '../helpers/constant'
 import { clearGridColor } from '../helpers/gridEvent'
 import { solveSudoku } from '../helpers/solveSudoku'
 import { copy } from '../helpers/helpers'
+import { SinglyLinkedListQueue } from '../utils/queue'
 
 export interface QueueObject {
   row: number
@@ -65,7 +66,7 @@ const Buttons = () => {
       return
     }
 
-    const queue: QueueObject[] = []
+    const queue = new SinglyLinkedListQueue<QueueObject>()
     let queueCopy = copy(copyGrid)
 
     const isSolved = solveSudoku(copyGrid, queue)
@@ -79,7 +80,7 @@ const Buttons = () => {
         return
       }
 
-      if (!queue.length) {
+      if (queue.isEmpty()) {
         isProcessingRef.current = false
         if (isSolved) {
           inputRefs.current.forEach((input) => {
@@ -93,7 +94,7 @@ const Buttons = () => {
         return
       }
 
-      const { row, col, val } = queue.shift()!
+      const { row, col, val } = queue.dequeue()!
       const copiedCopyGrid = copy(queueCopy)
       copiedCopyGrid[row][col] = val
       queueCopy = copiedCopyGrid
@@ -101,7 +102,7 @@ const Buttons = () => {
       queueRef.current = setTimeout(() => {
         setGrid(copiedCopyGrid)
         processQueue()
-      }, 0)
+      }, 1)
     }
 
     queueRef.current = null

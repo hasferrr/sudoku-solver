@@ -1,6 +1,10 @@
-import { QueueObject } from "../components/Buttons"
+import { type QueueObject } from "../components/Buttons"
+import { type SinglyLinkedListQueue } from "../utils/queue"
 
-export const solveSudoku = (board: number[][], queue?: QueueObject[]): boolean | null => {
+export const solveSudoku = (
+  board: number[][],
+  queue?: SinglyLinkedListQueue<QueueObject>,
+): boolean | null => {
   const MAX = 9
   const ROW_SET = new Map<number, Set<number>>()
   const COL_SET = new Map<number, Set<number>>()
@@ -48,7 +52,7 @@ export const solveSudoku = (board: number[][], queue?: QueueObject[]): boolean |
     for (let i = 1; i <= 9; i++) {
       if (!isValid(row, col, i)) continue
       setBoard(row, col, i)
-      queue?.push({
+      queue?.enqueue({
         row,
         col,
         val: i,
@@ -56,7 +60,7 @@ export const solveSudoku = (board: number[][], queue?: QueueObject[]): boolean |
       if (solve()) return true
     }
     setBoard(row, col, 0)
-    queue?.push({
+    queue?.enqueue({
       row,
       col,
       val: 0,
